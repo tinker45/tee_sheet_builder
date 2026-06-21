@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tee Sheet — Cart Signs & Pairings</title>
+<style>
+  :root{
+    --green:#1B4332;
+    --green-2:#2D6A4F;
+    --parchment:#F5F1E6;
+    --paper:#FBFAF4;
+    --brass:#B08D3C;
+    --brass-dk:#8A6B27;
+    --ink:#23281F;
+    --rule:#CBBF9E;
+    --muted:#6B6B5C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+    background:var(--green);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:22px 18px 64px;}
+
+  /* ---------- Masthead ---------- */
+  .mast{
+    text-align:center;color:var(--parchment);padding:14px 0 22px;
+  }
+  .flag{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--brass);font-weight:700;}
+  .mast h1{
+    font-family:Georgia,"Iowan Old Style","Times New Roman",serif;
+    font-weight:700;margin:6px 0 4px;font-size:34px;letter-spacing:.01em;
+  }
+  .mast p{margin:0;color:#CDD8CA;font-size:14px;}
+
+  /* ---------- Card panels ---------- */
+  .panel{
+    background:var(--paper);border:1px solid var(--rule);border-radius:10px;
+    padding:20px;margin-bottom:18px;box-shadow:0 10px 30px rgba(0,0,0,.18);
+  }
+  .panel h2{
+    font-family:Georgia,serif;font-size:18px;margin:0 0 4px;color:var(--green);
+    display:flex;align-items:center;gap:9px;
+  }
+  .panel h2 .num{
+    width:24px;height:24px;border-radius:50%;background:var(--green);color:var(--parchment);
+    font-family:Georgia,serif;font-size:13px;display:grid;place-items:center;flex:none;
+  }
+  .panel .sub{color:var(--muted);font-size:13px;margin:0 0 16px;}
+
+  .field-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:6px;}
+  .field{flex:1 1 200px;display:flex;flex-direction:column;gap:5px;}
+  label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;}
+  input,select{
+    font:inherit;font-size:15px;padding:9px 10px;border:1px solid var(--rule);
+    border-radius:7px;background:#fff;color:var(--ink);width:100%;
+  }
+  input:focus,select:focus{outline:2px solid var(--green-2);outline-offset:0;border-color:var(--green-2);}
+
+  /* ---------- Roster table ---------- */
+  table.roster{width:100%;border-collapse:collapse;}
+  table.roster th{
+    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--muted);font-weight:700;padding:0 8px 8px;
+  }
+  table.roster td{padding:4px 8px 4px 0;vertical-align:middle;}
+  table.roster td.name-c{width:46%;}
+  table.roster td.hcp-c{width:20%;}
+  table.roster td.grp-c{width:24%;}
+  table.roster td.x-c{width:10%;text-align:right;}
+  .xbtn{
+    border:none;background:none;color:var(--muted);font-size:20px;line-height:1;
+    cursor:pointer;padding:6px 8px;border-radius:6px;
+  }
+  .xbtn:hover{background:#eee;color:#b00;}
+
+  .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+  button.action{
+    font:inherit;font-weight:600;font-size:14px;cursor:pointer;border-radius:8px;
+    padding:11px 16px;border:1px solid transparent;
+  }
+  .btn-ghost{background:#fff;border-color:var(--rule);color:var(--green);}
+  .btn-ghost:hover{background:#F1EEE3;}
+  .btn-green{background:var(--green);color:var(--parchment);}
+  .btn-green:hover{background:var(--green-2);}
+  .btn-brass{background:var(--brass);color:#fff;}
+  .btn-brass:hover{background:var(--brass-dk);}
+
+  .savenote{font-size:12px;color:var(--muted);margin-top:10px;min-height:16px;}
+
+  /* group times */
+  .gtimes{display:flex;flex-wrap:wrap;gap:10px;}
+  .gtime{flex:1 1 150px;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:9px 11px;}
+  .gtime .gt-head{font-family:Georgia,serif;font-weight:700;color:var(--green);font-size:14px;margin-bottom:6px;}
+  .gtime input{padding:7px 9px;font-size:14px;}
+
+  /* ---------- Preview wrappers ---------- */
+  .prev-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;}
+  .prev-head .hint{font-size:12px;color:var(--muted);}
+
+  /* ---------- Cart sign ---------- */
+  #signs{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .sign{
+    background:var(--parchment);border:2px solid var(--green);border-radius:12px;
+    padding:18px 20px 16px;position:relative;
+  }
+  .sign::before{ /* grommet */
+    content:"";position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:14px;height:14px;border-radius:50%;background:#fff;border:2px solid var(--brass);
+  }
+  .sign .s-top{
+    text-align:center;margin-top:14px;border-bottom:1px solid var(--rule);padding-bottom:8px;
+  }
+  .sign .s-event{font-family:Georgia,serif;color:var(--green);font-weight:700;font-size:16px;}
+  .sign .s-meta{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+  .sign .s-grp{
+    text-align:center;margin:12px 0 10px;display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .sign .s-grp .badge{
+    width:34px;height:34px;border-radius:50%;background:var(--green);color:var(--parchment);
+    font-family:Georgia,serif;font-size:17px;display:grid;place-items:center;
+  }
+  .sign .s-grp .gtxt{font-family:Georgia,serif;font-size:20px;color:var(--green);font-weight:700;}
+  .sign .s-grp .gtee{font-size:12px;color:var(--brass-dk);font-weight:700;}
+  .sign ul{list-style:none;margin:0;padding:0;}
+  .sign li{
+    display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+    padding:7px 2px;border-bottom:1px dotted var(--rule);
+  }
+  .sign li:last-child{border-bottom:none;}
+  .sign .p-name{font-size:19px;font-weight:600;color:var(--ink);}
+  .sign .p-num{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .sign .p-num b{color:var(--green);font-size:13px;}
+
+  /* ---------- Pairing sheet ---------- */
+  .pairing{background:var(--paper);}
+  .ps-title{font-family:Georgia,serif;color:var(--green);font-size:24px;font-weight:700;text-align:center;margin:0;}
+  .ps-meta{text-align:center;color:var(--muted);font-size:13px;margin:4px 0 16px;}
+  table.ps{width:100%;border-collapse:collapse;}
+  table.ps th{
+    background:var(--green);color:var(--parchment);font-size:11px;text-transform:uppercase;
+    letter-spacing:.07em;text-align:left;padding:8px 10px;
+  }
+  table.ps td{padding:9px 10px;border-bottom:1px solid var(--rule);font-size:14px;vertical-align:top;}
+  table.ps tr:nth-child(even) td{background:#EFEDE2;}
+  table.ps .grp-cell{font-family:Georgia,serif;font-weight:700;color:var(--green);white-space:nowrap;}
+  table.ps .tee-cell{color:var(--brass-dk);font-weight:600;white-space:nowrap;}
+  table.ps .pl{display:flex;justify-content:space-between;gap:12px;padding:2px 0;}
+  table.ps .pl .h{color:var(--muted);font-variant-numeric:tabular-nums;}
+
+  .empty{color:var(--muted);font-size:14px;text-align:center;padding:24px;border:1px dashed var(--rule);border-radius:8px;}
+
+  /* ---------- Print ---------- */
+  @media print{
+    @page{margin:0.5in;}
+    body{background:#fff;}
+    .wrap{max-width:none;padding:0;}
+    .mast,.app-setup,.prev-head{display:none !important;}
+    .panel{box-shadow:none;border:none;padding:0;margin:0;background:#fff;}
+    .print-block{display:none;}        /* hide both previews by default */
+    body.print-signs #signs-block{display:block;}
+    body.print-pairing #pairing-block{display:block;}
+    #signs{grid-template-columns:1fr 1fr;gap:14px;}
+    .sign{break-inside:avoid;}
+    .pairing{break-inside:auto;}
+  }
+  @media (max-width:640px){
+    #signs{grid-template-columns:1fr;}
+    .mast h1{font-size:27px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="flag">&#9971; Buddy Group</div>
+    <h1>Tee Sheet Builder</h1>
+    <p>Type the foursomes once, print cart signs and a pairing sheet.</p>
+  </div>
+
+  <!-- SETUP (screen only) -->
+  <div class="app-setup">
+
+    <div class="panel">
+      <h2><span class="num">1</span> The round</h2>
+      <p class="sub">Shows up at the top of every cart sign and the pairing sheet.</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="evName">Event name</label>
+          <input id="evName" placeholder="Saturday Skins">
+        </div>
+        <div class="field">
+          <label for="evDate">Date</label>
+          <input id="evDate" placeholder="Sat, June 28">
+        </div>
+        <div class="field">
+          <label for="evCourse">Course / tees</label>
+          <input id="evCourse" placeholder="Pinehurst — White tees">
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">2</span> Players</h2>
+      <p class="sub">Pull each Course Handicap from the GHIN app's handicap calculator, then assign a group. Strokes are figured automatically off the lowest handicap in each group.</p>
+      <table class="roster">
+        <thead>
+          <tr>
+            <th>Player</th><th>Course HCP</th><th>Group</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="rosterBody"></tbody>
+      </table>
+      <div class="btn-row">
+        <button class="action btn-ghost" id="addBtn">+ Add player</button>
+        <button class="action btn-ghost" id="add4Btn">+ Add a foursome</button>
+      </div>
+      <div class="savenote" id="saveNote"></div>
+    </div>
+
+    <div class="panel" id="timesPanel" style="display:none">
+      <h2><span class="num">3</span> Tee times <span style="font-weight:400;font-size:13px;color:var(--muted)">(optional)</span></h2>
+      <p class="sub">Add a time or starting hole per group. Leave blank if you don't need them.</p>
+      <div class="gtimes" id="gtimes"></div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">4</span> Print</h2>
+      <p class="sub">Both open your browser's print dialog — choose "Save as PDF" to keep a copy, or send straight to a printer. Cart signs print two to a page; the pairing sheet is one page.</p>
+      <div class="btn-row">
+        <button class="action btn-green" id="printSigns">Print cart signs</button>
+        <button class="action btn-brass" id="printPairing">Print pairing sheet</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2><span class="num">5</span> Backup <span style="font-weight:400;font-size:13px;color:var(--muted)">(works anywhere)</span></h2>
+      <p class="sub">Tap <b>Copy backup</b>, then paste into Notes or an email to yourself. Next week, paste it back here and tap <b>Restore</b> &mdash; the whole roster comes back, even on a different iPad.</p>
+      <div class="btn-row">
+        <button class="action btn-green" id="copyBak">Copy backup</button>
+        <button class="action btn-ghost" id="showRestore">Restore from text</button>
+      </div>
+      <div id="restoreBox" style="display:none;margin-top:14px;">
+        <textarea id="bakInput" placeholder="Paste your backup text here&hellip;" style="width:100%;min-height:90px;font:inherit;font-size:13px;padding:10px;border:1px solid var(--rule);border-radius:7px;resize:vertical;"></textarea>
+        <div class="btn-row">
+          <button class="action btn-brass" id="restoreBtn">Restore</button>
+        </div>
+      </div>
+      <div class="savenote" id="bakNote"></div>
+    </div>
+  </div>
+
+  <textarea id="copyHelper" style="position:absolute;left:-9999px;top:0;" aria-hidden="true"></textarea>
+
+  <!-- PREVIEW: CART SIGNS -->
+  <div class="panel print-block" id="signs-block">
+    <div class="prev-head">
+      <h2 style="margin:0"><span class="num">&#9971;</span> Cart signs</h2>
+      <span class="hint">one per group</span>
+    </div>
+    <div id="signs"></div>
+  </div>
+
+  <!-- PREVIEW: PAIRING SHEET -->
+  <div class="panel print-block pairing" id="pairing-block">
+    <div class="prev-head">
+      <h2 style="margin:0"><span class="num">&#9971;</span> Pairing sheet</h2>
+      <span class="hint">master list</span>
+    </div>
+    <div id="pairing"></div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var KEY = "teesheet:data";
+  var GROUPS = [1,2,3,4,5,6,7,8];
+
+  var state = {
+    event:{name:"",date:"",course:""},
+    players:[],          // {name, hcp, group}
+    times:{}             // group -> "8:10 AM / Hole 1"
+  };
+  var userTouched = false;   // once true, a late storage load won't overwrite edits
+
+  // ---------- persistence ----------
+  function save(){
+    userTouched = true;
+    setNote("Saving\u2026");
+    try{
+      window.storage.set(KEY, JSON.stringify(state), false)
+        .then(function(){ setNote("Saved \u2014 your roster will be here next time."); })
+        .catch(function(){ setNote("Working in this tab only (couldn't save for next time)."); });
+    }catch(e){ setNote("Working in this tab only."); }
+  }
+  function load(){
+    // Draw the UI immediately so the page is usable with zero delay,
+    // independent of whether storage exists or how slow it is.
+    if(!state.players.length) seed();
+    hydrate();
+    // Then try to bring back a saved roster in the background.
+    try{
+      var p = window.storage && window.storage.get(KEY, false);
+      if(p && typeof p.then === "function"){
+        p.then(function(res){
+          if(userTouched) return;            // user already started: don't overwrite
+          if(res && res.value){
+            try{
+              var d = JSON.parse(res.value);
+              if(d && Array.isArray(d.players) && d.players.length){
+                state.event = d.event || state.event;
+                state.players = d.players;
+                state.times = d.times || {};
+                hydrate();
+              }
+            }catch(e){}
+          }
+        }).catch(function(){});
+      }
+    }catch(e){}
+  }
+  function seed(){
+    state.players = [
+      {name:"",hcp:"",group:"1"},
+      {name:"",hcp:"",group:"1"},
+      {name:"",hcp:"",group:"1"},
+      {name:"",hcp:"",group:"1"}
+    ];
+  }
+  function setNote(t){ document.getElementById("saveNote").textContent = t; }
+
+  // ---------- helpers ----------
+  function num(v){ var n = parseFloat(v); return isNaN(n)? null : n; }
+  function groupsInUse(){
+    var set = {};
+    state.players.forEach(function(p){ if(p.group) set[p.group]=true; });
+    return GROUPS.filter(function(g){ return set[g]; });
+  }
+  function playersOf(g){
+    return state.players.filter(function(p){ return String(p.group)===String(g) && (p.name||p.hcp); });
+  }
+  function lowHcp(list){
+    var lows = list.map(function(p){return num(p.hcp);}).filter(function(n){return n!==null;});
+    return lows.length? Math.min.apply(null,lows) : null;
+  }
+
+  // ---------- roster rendering ----------
+  function groupSelect(val){
+    var opts = '<option value="">&mdash;</option>';
+    GROUPS.forEach(function(g){
+      opts += '<option value="'+g+'"'+(String(val)===String(g)?' selected':'')+'>Group '+g+'</option>';
+    });
+    return opts;
+  }
+  function renderRoster(){
+    var tb = document.getElementById("rosterBody");
+    tb.innerHTML = "";
+    state.players.forEach(function(p,i){
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        '<td class="name-c"><input data-i="'+i+'" data-k="name" placeholder="Name" value="'+esc(p.name)+'"></td>'+
+        '<td class="hcp-c"><input data-i="'+i+'" data-k="hcp" inputmode="numeric" placeholder="HCP" value="'+esc(p.hcp)+'"></td>'+
+        '<td class="grp-c"><select data-i="'+i+'" data-k="group">'+groupSelect(p.group)+'</select></td>'+
+        '<td class="x-c"><button class="xbtn" data-del="'+i+'" title="Remove">&times;</button></td>';
+      tb.appendChild(tr);
+    });
+  }
+  function esc(s){ return String(s==null?"":s).replace(/"/g,"&quot;").replace(/</g,"&lt;"); }
+
+  // ---------- group-times rendering ----------
+  function renderTimes(){
+    var used = groupsInUse();
+    var panel = document.getElementById("timesPanel");
+    var box = document.getElementById("gtimes");
+    if(!used.length){ panel.style.display="none"; box.innerHTML=""; return; }
+    panel.style.display="";
+    box.innerHTML = used.map(function(g){
+      return '<div class="gtime"><div class="gt-head">Group '+g+'</div>'+
+             '<input data-time="'+g+'" placeholder="8:10 AM / Hole 1" value="'+esc(state.times[g]||"")+'"></div>';
+    }).join("");
+  }
+
+  // ---------- previews ----------
+  function renderSigns(){
+    var host = document.getElementById("signs");
+    var used = groupsInUse();
+    if(!used.length){ host.innerHTML = '<div class="empty">Add players and assign groups to see cart signs.</div>'; return; }
+    var ev = state.event;
+    host.innerHTML = used.map(function(g){
+      var list = playersOf(g);
+      var low = lowHcp(list);
+      var rows = list.map(function(p){
+        var h = num(p.hcp), strokes = (h!==null && low!==null)? Math.round(h-low) : null;
+        var right = "";
+        if(h!==null) right += 'HCP '+p.hcp;
+        if(strokes!==null && strokes>0) right += (right?' &middot; ':'')+'<b>gets '+strokes+'</b>';
+        else if(strokes===0) right += (right?' &middot; ':'')+'<b>scratch</b>';
+        return '<li><span class="p-name">'+(esc(p.name)||"&mdash;")+'</span><span class="p-num">'+right+'</span></li>';
+      }).join("");
+      var tee = state.times[g] ? '<span class="gtee">'+esc(state.times[g])+'</span>' : '';
+      return '<div class="sign">'+
+        '<div class="s-top"><div class="s-event">'+(esc(ev.name)||"Golf")+'</div>'+
+        '<div class="s-meta">'+[esc(ev.date),esc(ev.course)].filter(Boolean).join(" &middot; ")+'</div></div>'+
+        '<div class="s-grp"><span class="badge">'+g+'</span><span class="gtxt">Group '+g+'</span>'+tee+'</div>'+
+        '<ul>'+rows+'</ul></div>';
+    }).join("");
+  }
+
+  function renderPairing(){
+    var host = document.getElementById("pairing");
+    var used = groupsInUse();
+    if(!used.length){ host.innerHTML = '<div class="empty">Add players and assign groups to see the pairing sheet.</div>'; return; }
+    var ev = state.event;
+    var meta = [esc(ev.date),esc(ev.course)].filter(Boolean).join(" &middot; ");
+    var rows = used.map(function(g){
+      var list = playersOf(g);
+      var low = lowHcp(list);
+      var players = list.map(function(p){
+        var h=num(p.hcp), strokes=(h!==null&&low!==null)?Math.round(h-low):null;
+        var tag = h!==null ? ('HCP '+p.hcp+(strokes>0?' (gets '+strokes+')':strokes===0?' (scr)':'')) : '';
+        return '<div class="pl"><span>'+(esc(p.name)||"&mdash;")+'</span><span class="h">'+tag+'</span></div>';
+      }).join("");
+      var tee = state.times[g] ? '<span class="tee-cell">'+esc(state.times[g])+'</span>' : '<span style="color:#bbb">&mdash;</span>';
+      return '<tr><td class="grp-cell">Group '+g+'</td><td>'+tee+'</td><td>'+players+'</td></tr>';
+    }).join("");
+    host.innerHTML =
+      '<div class="pairing" style="padding:6px 2px">'+
+      '<h3 class="ps-title">'+(esc(ev.name)||"Pairings")+'</h3>'+
+      (meta?'<div class="ps-meta">'+meta+'</div>':'<div style="height:8px"></div>')+
+      '<table class="ps"><thead><tr><th style="width:120px">Group</th><th style="width:140px">Tee / Hole</th><th>Players</th></tr></thead>'+
+      '<tbody>'+rows+'</tbody></table></div>';
+  }
+
+  function renderPreviews(){ renderSigns(); renderPairing(); }
+
+  // ---------- hydrate + events ----------
+  function hydrate(){
+    document.getElementById("evName").value = state.event.name||"";
+    document.getElementById("evDate").value = state.event.date||"";
+    document.getElementById("evCourse").value = state.event.course||"";
+    renderRoster(); renderTimes(); renderPreviews();
+  }
+
+  // event fields
+  ["evName","evDate","evCourse"].forEach(function(id){
+    document.getElementById(id).addEventListener("input",function(){
+      state.event.name = document.getElementById("evName").value;
+      state.event.date = document.getElementById("evDate").value;
+      state.event.course = document.getElementById("evCourse").value;
+      renderPreviews(); save();
+    });
+  });
+
+  // roster delegation
+  var body = document.getElementById("rosterBody");
+  body.addEventListener("input",function(e){
+    var t=e.target, i=t.getAttribute("data-i"), k=t.getAttribute("data-k");
+    if(i==null) return;
+    state.players[+i][k]=t.value;
+    renderPreviews(); save();
+  });
+  body.addEventListener("change",function(e){
+    var t=e.target;
+    if(t.getAttribute("data-k")==="group"){
+      state.players[+t.getAttribute("data-i")].group=t.value;
+      renderTimes(); renderPreviews(); save();
+    }
+  });
+  body.addEventListener("click",function(e){
+    var d=e.target.getAttribute && e.target.getAttribute("data-del");
+    if(d!=null){ state.players.splice(+d,1); renderRoster(); renderTimes(); renderPreviews(); save(); }
+  });
+
+  // times delegation
+  document.getElementById("gtimes").addEventListener("input",function(e){
+    var g=e.target.getAttribute("data-time");
+    if(g!=null){ state.times[g]=e.target.value; renderPreviews(); save(); }
+  });
+
+  // add buttons
+  function nextGroup(){
+    var counts={};
+    state.players.forEach(function(p){ if(p.group) counts[p.group]=(counts[p.group]||0)+1; });
+    for(var i=0;i<GROUPS.length;i++){ var g=GROUPS[i]; if((counts[g]||0)<4) return String(g); }
+    return "";
+  }
+  document.getElementById("addBtn").addEventListener("click",function(){
+    state.players.push({name:"",hcp:"",group:nextGroup()});
+    renderRoster(); renderTimes(); renderPreviews(); save();
+  });
+  document.getElementById("add4Btn").addEventListener("click",function(){
+    var g=nextGroup();
+    for(var n=0;n<4;n++) state.players.push({name:"",hcp:"",group:g});
+    renderRoster(); renderTimes(); renderPreviews(); save();
+  });
+
+  // print
+  function printAs(cls){
+    document.body.classList.add(cls);
+    var clear=function(){ document.body.classList.remove(cls); window.removeEventListener("afterprint",clear); };
+    window.addEventListener("afterprint",clear);
+    window.print();
+    setTimeout(clear,1000);
+  }
+  document.getElementById("printSigns").addEventListener("click",function(){ printAs("print-signs"); });
+  document.getElementById("printPairing").addEventListener("click",function(){ printAs("print-pairing"); });
+
+  // ---------- backup: copy / restore ----------
+  var BAK_TAG = "TEESHEET-BACKUP-v1";
+  function bakNote(t){ document.getElementById("bakNote").textContent = t; }
+
+  function makeBackup(){
+    return BAK_TAG + " " + JSON.stringify({
+      event: state.event, players: state.players, times: state.times
+    });
+  }
+
+  function copyBackup(){
+    var text = makeBackup();
+    var done = function(){ bakNote("Copied. Paste it into Notes to keep it safe."); };
+    var fail = function(){
+      // fallback: select the hidden textarea so user can copy manually
+      var h=document.getElementById("copyHelper"); h.value=text; h.style.left="0"; h.focus(); h.select();
+      bakNote("Couldn't auto-copy \u2014 the text is selected above, press Copy.");
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(function(){
+        try{ var h=document.getElementById("copyHelper"); h.value=text; h.style.left="0"; h.select(); document.execCommand("copy"); h.style.left="-9999px"; done(); }
+        catch(e){ fail(); }
+      });
+    } else {
+      try{ var h=document.getElementById("copyHelper"); h.value=text; h.style.left="0"; h.select(); document.execCommand("copy"); h.style.left="-9999px"; done(); }
+      catch(e){ fail(); }
+    }
+  }
+
+  function restoreBackup(){
+    var raw = (document.getElementById("bakInput").value||"").trim();
+    if(!raw){ bakNote("Paste your backup text first."); return; }
+    var json = raw.indexOf(BAK_TAG)===0 ? raw.slice(BAK_TAG.length).trim() : raw;
+    var start = json.indexOf("{");
+    if(start>0) json = json.slice(start);
+    try{
+      var d = JSON.parse(json);
+      if(!d || !Array.isArray(d.players)) throw new Error("bad");
+      state.event = d.event || {name:"",date:"",course:""};
+      state.players = d.players;
+      state.times = d.times || {};
+      hydrate(); save();
+      document.getElementById("restoreBox").style.display="none";
+      document.getElementById("bakInput").value="";
+      bakNote("Restored \u2014 "+state.players.length+" players loaded.");
+    }catch(e){
+      bakNote("That text didn't look like a backup. Copy the whole thing and try again.");
+    }
+  }
+
+  document.getElementById("copyBak").addEventListener("click",copyBackup);
+  document.getElementById("restoreBtn").addEventListener("click",restoreBackup);
+  document.getElementById("showRestore").addEventListener("click",function(){
+    var box=document.getElementById("restoreBox");
+    box.style.display = box.style.display==="none" ? "block" : "none";
+    if(box.style.display==="block") document.getElementById("bakInput").focus();
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
