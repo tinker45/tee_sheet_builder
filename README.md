@@ -12,36 +12,6 @@ install, no sign-in, no accounts. It's one HTML file.
 
 ---
 
-## Deploy it (GitHub Pages)
-
-Hosting it at a real web address is what makes it nicest to use: it opens in Safari, can be
-added to the Home Screen like an app, and the "remembers your roster" feature works.
-
-1. **Rename the app file to `index.html`** and put it in the repo root.
-   (GitHub Pages serves `index.html` as the site's home page, so the URL stays clean.)
-2. Commit and push.
-3. In the repo on GitHub: **Settings → Pages**.
-4. Under **Build and deployment → Source**, choose **Deploy from a branch**.
-5. Set the branch to **`main`** and the folder to **`/ (root)`**, then **Save**.
-6. Wait ~1 minute. Your link appears at the top of the Pages settings, in the form:
-
-   ```
-   https://<your-username>.github.io/<repo-name>/
-   ```
-
-That link is what you send. (Optional: point a custom domain at it in the same Pages
-settings if you'd rather have something like `tee.yourdomain.com`.)
-
-### Suggested repo layout
-
-```
-your-repo/
-├─ index.html     ← the app (renamed from tee-sheet-builder.html)
-└─ README.md      ← this file
-```
-
----
-
 ## How to use it (for the golfer)
 
 Open the link in **Safari** on an iPad, then tap **Share → Add to Home Screen** so it opens
