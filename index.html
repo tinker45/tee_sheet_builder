@@ -152,8 +152,9 @@
     body.print-cards #cards-block{display:block;}
     body.print-pairing #pairing-block{display:block;}
     body.print-signs #signs-block{display:block;}
-    .scard-wrap{break-inside:avoid;page-break-after:always;}
-    .scard-wrap:last-child{page-break-after:auto;}
+    .scard-wrap{break-inside:avoid;margin-bottom:26px;}
+    #cards .scard-wrap:nth-child(2n){page-break-after:always;}
+    #cards .scard-wrap:last-child{page-break-after:auto;}
     table.scard{font-size:10px;}
     .sign{break-inside:avoid;}
   }
@@ -642,7 +643,35 @@
   }
   function savePdf(){
     var items=Array.prototype.slice.call(document.querySelectorAll("#cards .scard-wrap"));
-    buildPdf({ items:items, orientation:"landscape", filename:safeName("scorecards"), btn:document.getElementById("savePdf"), fallback:function(){ printAs("print-cards","landscape"); } });
+    buildPdfGrid({ items:items, orientation:"landscape", perPage:2, filename:safeName("scorecards"), btn:document.getElementById("savePdf"), fallback:function(){ printAs("print-cards","landscape"); } });
+  }
+  // Two (or more) items stacked vertically per page; assumes each item fits its slot.
+  function buildPdfGrid(opts){
+    var items=opts.items, orient=opts.orientation, perPage=opts.perPage||2, filename=opts.filename, btn=opts.btn, fallback=opts.fallback;
+    var label=btn?btn.textContent:"";
+    if(!items.length){ pdfNote("Nothing to export yet \u2014 add players and groups first."); return; }
+    if(btn) btn.textContent="Building PDF\u2026"; pdfNote("Working\u2026 this can take a few seconds.");
+    ensureLibs().then(function(){
+      var jsPDF=window.jspdf.jsPDF;
+      var doc=new jsPDF({orientation:orient,unit:"pt",format:"letter"});
+      var margin=24, gap=20, pageW=doc.internal.pageSize.getWidth(), pageH=doc.internal.pageSize.getHeight();
+      var availW=pageW-2*margin, availH=pageH-2*margin, regionH=(availH-(perPage-1)*gap)/perPage, i=0;
+      function done(){ if(btn) btn.textContent=label; doc.save(filename); pdfNote("Saved. On iPad it may open in a new view \u2014 tap Share to save or email it."); }
+      function fail(){ if(btn) btn.textContent=label; pdfNote("Couldn't build the PDF here \u2014 opening the print screen instead; choose Save as PDF."); if(fallback) fallback(); }
+      function next(){
+        if(i>=items.length){ done(); return; }
+        window.html2canvas(items[i],{scale:2,backgroundColor:"#ffffff",useCORS:true}).then(function(canvas){
+          var slot=i%perPage;
+          if(i>0&&slot===0) doc.addPage();
+          var scale=Math.min(availW/canvas.width, regionH/canvas.height);
+          var w=canvas.width*scale, h=canvas.height*scale;
+          var x=margin+(availW-w)/2, y=margin+slot*(regionH+gap);
+          doc.addImage(canvas.toDataURL("image/png"),"PNG",x,y,w,h);
+          i++; next();
+        }).catch(fail);
+      }
+      next();
+    }).catch(function(){ if(btn) btn.textContent=label; pdfNote("Couldn't load the PDF tool (no connection?) \u2014 opening the print screen; choose Save as PDF there."); if(fallback) fallback(); });
   }
   function savePairingPdf(){
     var el=document.getElementById("pairing");
